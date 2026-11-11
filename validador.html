@@ -1038,9 +1038,10 @@ const { detectarViolacoes } = require('../etica');
 const { responder } = require('../robo/resposta');
 const { NOME_PADRAO, novaPartida, registrar, substituirUltima, fmtMedia, ranking, MIN_JOGADAS } = require('../motor/placar');
 
+// `traco` é a cor do rosto e da antena sobre o corpo; o contorno usa currentColor para aparecer em qualquer fundo (branco e preto).
 const ROBOS = [
-  { n: 1, nome: 'Círculo azul', cor: '#4F9DE8' }, { n: 2, nome: 'Quadrado laranja', cor: '#F08A4B' },
-  { n: 3, nome: 'Hexágono violeta', cor: '#A58BEA' }, { n: 4, nome: 'Trapézio verde', cor: '#7BCB6A' },
+  { n: 1, nome: 'Círculo azul', cor: '#4F9DE8', traco: '#0B1B33' }, { n: 2, nome: 'Quadrado amarelo', cor: '#FFD23F', traco: '#0B1B33' },
+  { n: 3, nome: 'Hexágono branco', cor: '#FFFFFF', traco: '#0B1B33' }, { n: 4, nome: 'Trapézio preto', cor: '#111111', traco: '#FFFFFF' },
 ];
 const NIVEL = { facil: ['fácil', 1], medio: ['média', 2], dificil: ['difícil', 3] };
 const CRIT = { persona: 'Persona', tarefa: 'Tarefa', formato: 'Formato', contexto: 'Contexto', instrucao: 'Instrução objetiva',
@@ -1083,15 +1084,16 @@ const BTN_CONTINUAR = `<button type="button" class="prim" data-act="continuar" $
 
 function roboSvg(n, tam) {
   const r = ROBOS[n - 1];
+  const corpo = `data-corpo fill="${r.cor}" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"`;
   const forma = [
-    `<circle cx="32" cy="38" r="22" fill="${r.cor}"/>`,
-    `<rect x="11" y="17" width="42" height="42" rx="3" fill="${r.cor}"/>`,
-    `<polygon points="32,15 52,26.5 52,49.5 32,61 12,49.5 12,26.5" fill="${r.cor}"/>`,
-    `<polygon points="19,17 45,17 56,59 8,59" fill="${r.cor}"/>`,
+    `<circle cx="32" cy="38" r="22" ${corpo}/>`,
+    `<rect x="11" y="17" width="42" height="42" rx="3" ${corpo}/>`,
+    `<polygon points="32,15 52,26.5 52,49.5 32,61 12,49.5 12,26.5" ${corpo}/>`,
+    `<polygon points="19,17 45,17 56,59 8,59" ${corpo}/>`,
   ][n - 1];
   return `<svg width="${tam}" height="${tam}" viewBox="0 0 64 64" role="img" aria-label="${r.nome}">`
-    + `<line x1="32" y1="4" x2="32" y2="14" stroke="#0B1B33" stroke-width="3"/><circle cx="32" cy="5" r="3" fill="#0B1B33"/>${forma}`
-    + `<circle cx="24" cy="36" r="4" fill="#0B1B33"/><circle cx="40" cy="36" r="4" fill="#0B1B33"/><rect x="24" y="46" width="16" height="3" rx="1.5" fill="#0B1B33"/></svg>`;
+    + `<line x1="32" y1="4" x2="32" y2="14" stroke="currentColor" stroke-width="3"/><circle cx="32" cy="5" r="3" fill="currentColor"/>${forma}`
+    + `<circle cx="24" cy="36" r="4" fill="${r.traco}"/><circle cx="40" cy="36" r="4" fill="${r.traco}"/><rect x="24" y="46" width="16" height="3" rx="1.5" fill="${r.traco}"/></svg>`;
 }
 function nivelBadge(nivel, extra) {
   const [nome, barras] = NIVEL[nivel];
